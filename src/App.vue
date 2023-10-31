@@ -1,4 +1,31 @@
-<script setup></script>
+<script setup>
+
+  import{ref} from "vue";
+  import dragonData from "./assets/js/dragons";
+  import DragonComp from "./components/DragonComp.vue";
+
+  // State
+
+  const dragons = ref(dragonData);
+
+  // Functions
+
+  function handleUpdate(awesomeNewName, dragonId){
+    // Start med at finde den rigtige drage
+    const correctDragon = dragons.value.find(
+      function(dragon){
+        return dragon.id == dragonId
+      }
+    )
+    // Opdatér dens navn
+    correctDragon.name = awesomeNewName
+  }
+
+  // function handleEvent(pay1, pay2){
+  //   console.log("My child just emitted stuff: ", pay1 + ". Og her er en til: ", pay2)
+  // }
+
+</script>
 
 <template>
   <!--  -->
@@ -69,11 +96,13 @@
     <h1>D&D website</h1>
     <h2>
       Your source for DnD dragons. Providing dragon information since 2021.<br />
-      Find info about <span>8</span> dragons here.
+      Find info about <span>{{ dragons.length }}</span> dragons here.
     </h2>
   </header>
   <main>
     <!-- Indsæt drager her... -->
+    <DragonComp @updateName="handleUpdate" v-for="dragon in dragons" :key="dragon.id" :dragonData="dragon"></DragonComp>
+    <!-- <DragonComp v-for="(dragon, index) in dragons" :key="index"></DragonComp> Har man ikke et ID, kan man henvise til indexen i arrayet i stedet -->
   </main>
 </template>
 
